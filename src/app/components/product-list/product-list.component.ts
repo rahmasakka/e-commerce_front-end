@@ -44,7 +44,6 @@ export class ProductListComponent implements OnInit {
         this.products = data;
       }
     )
-
   }
 
 
@@ -54,7 +53,6 @@ export class ProductListComponent implements OnInit {
 
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
     // const hasCategoryId: boolean = this.route/*use the activated route*/.snapshot/*State of route at this given moment in time*/.paramMap/*Map of all the route parameters*/.has('id');
-
 
     if (hasCategoryId) {
       // get the "id" param string. convert string to a numberusing the "+" symbol
@@ -66,7 +64,6 @@ export class ProductListComponent implements OnInit {
 
     console.log(this.productService.getProductList(this.currentCategoryId));
 
-
     //now get the products for the given category id 
     this.productService.getProductList(this.currentCategoryId).subscribe(
       data => {
@@ -74,5 +71,4 @@ export class ProductListComponent implements OnInit {
       }
     )
   }
-
 }
