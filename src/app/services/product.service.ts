@@ -22,14 +22,36 @@ export class ProductService {
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
     return this.getProducts(searchUrl);
   }
+
+  getProductListPaginate(thePage: number,
+    thePageSize: number,
+    theCategoryId: number): Observable<GetResponseProducts> {
+
+    //need to build URL based on category id, page and size
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
+      + `&page=${thePage}&size=${thePageSize}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
   //need to build URL based on keyword
-  searchProducts(theKeyword: string): Observable<Product[]>{
+  searchProducts(theKeyword: string): Observable<Product[]> {
     const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
-    
+
     return this.getProducts(searchUrl);
   }
 
-  private getProducts(searchUrl: string): Observable<Product[]>{
+  SearchProductsPaginate(thePage: number,
+                         thePageSize: number,
+                         theKeyword: string ): Observable<GetResponseProducts> {
+
+    //need to build URL based on keyword, page and size
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`
+                       + `&page=${thePage}&size=${thePageSize}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
+
+  private getProducts(searchUrl: string): Observable<Product[]> {
     return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(map(response => response._embedded.products))
   }
 
@@ -42,15 +64,22 @@ export class ProductService {
 
   getProductCategories(): Observable<ProductCategory[]> {
     return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
-    //returns an observable, maps the JSON data from Spring Data REST to ProductCategory array
+      //returns an observable, maps the JSON data from Spring Data REST to ProductCategory array
       map(response => response._embedded.productCategory)
     )
   }
+
 }
 
 interface GetResponseProducts {
   _embedded: {
     products: Product[];
+  },
+  page: {
+    size: number,
+    totalElements: number,
+    totalPages: number,
+    number: number
   }
 }
 
