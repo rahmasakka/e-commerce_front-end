@@ -1,6 +1,6 @@
 import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { CartItem } from '../common/cart-item';
 
 @Injectable({
@@ -9,8 +9,8 @@ import { CartItem } from '../common/cart-item';
 export class CartService {
   cartItems: CartItem[] = [];
 
-  totalPrice: Subject<number> = new Subject<number>();
-  totalQuantity: Subject<number> = new Subject<number>();
+  totalPrice: Subject<number> = new BehaviorSubject<number>(0.00);
+  totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
 
   constructor() { }
@@ -21,7 +21,7 @@ export class CartService {
     let existingCartItem: CartItem = undefined!;
     if (this.cartItems.length > 0) {
       //find the item in the cart based on item id
-      
+
       for (let tempCartItem of this.cartItems) {
         if (tempCartItem.id === theCartItem.id) {
           existingCartItem = tempCartItem;
@@ -46,10 +46,10 @@ export class CartService {
   }
 
   computeCartTotals() {
-    let totalPriceValue : number = 0.00;
+    let totalPriceValue: number = 0.00;
     let totalQuantityValue: number = 0;
 
-    for(let currentCartItem of this.cartItems){
+    for (let currentCartItem of this.cartItems) {
       totalPriceValue += currentCartItem.quantity * currentCartItem.unitPrice;
       totalQuantityValue += currentCartItem.quantity;
     }
@@ -61,9 +61,9 @@ export class CartService {
     this.logCartData(totalPriceValue, totalQuantityValue);
   }
 
-  logCartData(totalPriceValue: number, totalQuantityValue: number){
+  logCartData(totalPriceValue: number, totalQuantityValue: number) {
     console.log(`Contents of the cart`);
-    for(let tempCartItem of this.cartItems){
+    for (let tempCartItem of this.cartItems) {
       const subTotalPrice = tempCartItem.quantity * tempCartItem.unitPrice;
       console.log(`name: ${tempCartItem.name}, quantity=${tempCartItem.quantity}, unitPrice=${tempCartItem.unitPrice}, subTotalPrice=${subTotalPrice}`);
     }
@@ -71,22 +71,22 @@ export class CartService {
     console.log('------');
   }
 
-  decrementQuantity(theCartItem: CartItem){
+  decrementQuantity(theCartItem: CartItem) {
     theCartItem.quantity--;
 
-    if(theCartItem.quantity === 0){
+    if (theCartItem.quantity === 0) {
       this.remove(theCartItem);
-    }else{
+    } else {
       this.computeCartTotals();
     }
   }
 
-  remove(theCartItem: CartItem){
+  remove(theCartItem: CartItem) {
     // get index of item in the array
-    const itemIndex= this.cartItems.findIndex( tempCartItem=> tempCartItem.id ===theCartItem.id)
+    const itemIndex = this.cartItems.findIndex(tempCartItem => tempCartItem.id === theCartItem.id)
     //if found, remove the item from the array at the given index
-    if(itemIndex> -1){
-      this.cartItems.splice(itemIndex,1);
+    if (itemIndex > -1) {
+      this.cartItems.splice(itemIndex, 1);
       this.computeCartTotals();
     }
   }
