@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [13.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -42,3 +42,4 @@ jobs:
       
       - name: List Files in Distribution Directory
         run: ls -R ./dist
+ 
