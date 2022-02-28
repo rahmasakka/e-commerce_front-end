@@ -1,29 +1,25 @@
 name: Node.js Package
-
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  release:
-    types: [created]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [14.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v1
+
+      - name: Node $
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm ci
-      - run: npm run build
-      - run: npm test
+          node-version: $
+
+      - name: npm install and npm run build
+        run: |
+          npm ci
+          npm run build:ci
