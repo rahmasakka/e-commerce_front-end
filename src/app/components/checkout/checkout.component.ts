@@ -114,12 +114,12 @@ export class CheckoutComponent implements OnInit {
   reviewCartDetails() {
     //subscribe to cartService.totalQuantity
     this.cartService.totalQuantity.subscribe(
-      totalQuantity => this.totalQuantity = this.totalQuantity
-    )
+      totalQuantity => this.totalQuantity = totalQuantity
+    );
     //subscribe to cartService.totalPrice
     this.cartService.totalPrice.subscribe(
-      totalPrice => this.totalPrice = this.totalPrice
-    )
+      totalPrice => this.totalPrice = totalPrice
+    );
   }
 
   get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }
@@ -167,12 +167,13 @@ export class CheckoutComponent implements OnInit {
 
     //create orderITems from cartItems
     // - long way
+
     /*let orderItems: OrderItem[]= [];
     for(let i =0; i<cartItems.length; i++){
       orderItems[i] = new OrderItem(cartItems[i]);
     }*/
 
-    // - short way of doing the same think
+    // - short way of doing the same thingy
     let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
     
 
@@ -193,8 +194,8 @@ export class CheckoutComponent implements OnInit {
     purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
     const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state));
     const billingCountry: State = JSON.parse(JSON.stringify(purchase.billingAddress.country));
-    purchase.shippingAddress.state = billingState.name;
-    purchase.shippingAddress.country = billingCountry.name;
+    purchase.billingAddress.state = billingState.name;
+    purchase.billingAddress.country = billingCountry.name;
 
     //populate purchase - order and orderItems
     purchase.order = order;
@@ -273,10 +274,10 @@ export class CheckoutComponent implements OnInit {
 
     const countryCode = formGroup?.value.country.code;
     const countryName = formGroup?.value.country.name;
-
+/*
     console.log(`${formGroupName} country code : ${countryCode}`);
     console.log(`${formGroupName} country name : ${countryName}`);
-
+*/
     this.luv2ShopFormService.getStates(countryCode).subscribe(
       data => {
         if (formGroupName === 'shippingAddress') {
