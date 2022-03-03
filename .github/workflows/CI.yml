@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: Angular CI
 on:
   push:
@@ -36,3 +37,30 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: |
+=======
+name: Node.js Package
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Node $
+        uses: actions/setup-node@v1
+        with:
+          node-version: $
+
+      - name: npm install and npm run build
+        run: |
+          npm ci
+          npm run build:ci
+>>>>>>> a15d91592ae1082f2b71a2e7171b2e2b74d4380c
